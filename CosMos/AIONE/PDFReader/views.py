@@ -6,7 +6,7 @@ import os
 from langchain.document_loaders import TextLoader
 from langchain.indexes import VectorstoreIndexCreator
 
-os.environ["OPENAI_API_KEY"] = "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"
+os.environ["OPENAI_API_KEY"] = ""
 
 loader = TextLoader("Data\info.txt")
 index = VectorstoreIndexCreator().from_loaders([loader])
