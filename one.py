@@ -1,6 +1,10 @@
 import streamlit as st
 from dotenv import load_dotenv
 from PyPDF2 import PdfReader
+import streamlit_authenticator as auth
+import datetime
+import  re
+from deta import  Deta
 from langchain.text_splitter import CharacterTextSplitter
 from langchain.embeddings import OpenAIEmbeddings, HuggingFaceInstructEmbeddings
 from langchain.vectorstores import FAISS
@@ -8,6 +12,7 @@ from langchain.memory import ConversationBufferMemory
 from langchain.chains import ConversationalRetrievalChain
 from langchain.chat_models import ChatOpenAI
 from index import css, bot_template, user_template
+
 
 
 def get_pdf_text(pdf_docs):
@@ -62,7 +67,7 @@ def handleQuestion(ques):
 
 
 def main():
-    st.set_page_config(page_title="AIONE", page_icon=":🛩:")
+    # st.set_page_config(page_title="AIONE", page_icon=":🛩:")
     st.write(css, unsafe_allow_html=True)
     if "conversation" not in st.session_state:
         st.session_state.conversation = None
