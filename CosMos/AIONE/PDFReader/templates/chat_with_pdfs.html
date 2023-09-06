@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Chat with Bot</title>
+    <style>
+        /* Add your CSS styles here */
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap');
+        body {
+           font-family: 'Poppins', sans-serif;
+            background-color: #08AEEA;
+            background-image: linear-gradient(180deg, #08AEEA 0%, #2AF598 50%, #3027b9 100%);
+
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: row;
+        }
+
+
+        #chat-box{
+            margin: auto;
+            width: 75%;
+           
+            height: 400px;
+        }
+
+        #sidebar {
+            width: 20%;
+            height: 100vh;
+            background-color: purple; /* Set sidebar background color to purple */
+            padding: 20px;
+            color: white;
+            float: left;
+            padding: 20px;
+        }
+        #main-content {
+            width: 80%;
+            padding: 20px;
+        }
+        #chat-box {
+            height: 300px;
+            overflow-y: scroll;
+            background-color: white;/* Add a visible border with a width of 2px */
+            border-radius: 20px; /* Make it a square-like chat box with rounded corners */
+            padding: 10px;
+        }
+        #pdf-preview {
+            width: 100%;
+            height: auto;
+        }
+        /* Add styling for user and bot responses */
+        .user-response {
+            text-align: right;
+            color: blue;
+            margin-bottom: 5px;
+        }
+        .bot-response {
+            text-align: left;
+            color: green;
+            margin-bottom: 5px;
+        }
+
+        .message.user-message {
+            display: flex;
+            align-items: flex-start; 
+            margin-bottom: 10px; 
+        }
+        
+        /* Style for bot message */
+        .message.bot-message {
+            display: flex;
+            align-items: flex-start;
+            justify-content: flex-end;
+            margin-bottom: 10px;
+        }
+        
+        /* Style for avatars */
+        .Bavatar {
+            width: 40px; 
+            height: 40px; 
+            border-radius: 50px;
+            align-items: flex-end;
+            justify-content: flex-end;
+            margin-left: 15px; 
+        }
+        .Uavatar {
+            width: 40px; 
+            height: 40px; 
+            margin-right: 10px; 
+        }
+
+        #user-input{
+        margin: auto;
+        height: 35px;
+        border-radius: 10px;
+        border-color: 5px solid rgb(236, 7, 236);
+        margin-top:20px;
+         margin-left: 135px;
+        width:67%;
+
+        }
+
+        ::placeholder {
+            color:#cbd0d5;
+        }
+
+/* CSS */
+.button-20 {
+  appearance: button;
+  margin-top: 0px;
+  background-color: #4D4AE8;
+  background-image: linear-gradient(180deg, rgba(255, 255, 255, .15), rgba(255, 255, 255, 0));
+  border: 1px solid #4D4AE8;
+  border-radius: 1rem;
+  box-shadow: rgba(255, 255, 255, 0.15) 0 1px 0 inset,rgba(46, 54, 80, 0.075) 0 1px 1px;
+  box-sizing: border-box;
+  color: #FFFFFF;
+  cursor: pointer;
+  display: inline-block;
+  font-family: Inter,sans-serif;
+  font-size: 1rem;
+  font-weight: 500;
+  line-height: 1.5;
+  padding: .5rem 1rem;
+  text-align: center;
+  text-transform: none;
+  transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  vertical-align: middle;
+}
+
+.button-20:focus:not(:focus-visible),
+.button-20:focus {
+  outline: 0;
+}
+
+.button-20:hover {
+  background-color: #3733E5;
+  border-color: #3733E5;
+}
+
+.button-20:focus {
+  background-color: #413FC5;
+  border-color: #3E3BBA;
+  box-shadow: rgba(255, 255, 255, 0.15) 0 1px 0 inset, rgba(46, 54, 80, 0.075) 0 1px 1px, rgba(104, 101, 235, 0.5) 0 0 0 .2rem;
+}
+
+.button-20:active {
+  background-color: #3E3BBA;
+  background-image: none;
+  border-color: #3A38AE;
+  box-shadow: rgba(46, 54, 80, 0.125) 0 3px 5px inset;
+}
+
+.button-20:active:focus {
+  box-shadow: rgba(46, 54, 80, 0.125) 0 3px 5px inset, rgba(104, 101, 235, 0.5) 0 0 0 .2rem;
+}
+
+.button-20:disabled {
+  background-image: none;
+  box-shadow: none;
+  opacity: .65;
+  pointer-events: none;
+}
+        
+        .message p {
+            padding: 10px;
+            background-color: #e6e6e6;
+            border-radius: 10px;
+        }
+        
+       
+        .message.user-message p {
+            border-top-left-radius: 0; 
+        }
+        .user-message {
+            justify-content: flex-start; /* Align user messages to the left */
+        }
+        
+        .bot-message {
+            justify-content: flex-end; /* Align bot messages to the right */
+        }
+        
+        
+        /* Style for bot message text */
+        .message.bot-message p {
+            border-top-right-radius: 0; 
+        }
+
+        .headChat{
+            width: 40%;
+            margin: auto;
+            text-align:center;
+            margin-bottom: 20px;
+            border: 4px solid purple;
+            box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
+        }
+
+        .border {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border: 2px solid transparent; /* Set border width and color */
+            border-radius: 20px;
+            background-clip:linear-gradient(130deg, #ff7a18, #af002d 41.07%, #319197 76.05%);; /* Clip the background to content-box */
+            z-index: 0; /* Ensure it's behind the chat-box content */
+        }
+
+        
+
+
+    </style>
+</head>
+<body>
+<div id="sidebar">
+    <h1>Upload PDF</h1>
+    <form method="post" enctype="multipart/form-data" >
+        {% csrf_token %}
+        <input id="pdf-input" type="file"  name="pdf_file">
+        <button id="pt-Button" >Proceed</button>
+    </form>
+<!--    <div id="proceed-button">-->
+<!--        <button id="pt-Button" onclick="startChat()">Proceed</button>-->
+<!--    </div>-->
+    <h3>DOCUMENTS :- </h3>
+    <div id="below-proceed">
+
+
+    </div>
+
+</div>
+<div id="main-content">
+    <h1 style="text-align: center;" class="headChat" >Chat PDF with Bot</h1>
+    <div id="pdf-container" style="display: none;">
+        <h2>Uploaded PDF:</h2>
+        <embed id="pdf-preview" src="" type="application/pdf">
+    </div>
+    <div id="chat-box" style="text-align: center;" class="headChat" >
+        <!-- Chat messages will appear here -->
+    </div>
+
+    <form id="question-form" method="post" action="{% url 'process_question' %}">
+    {% csrf_token %}
+    <input type="text" id="user-input" name="user_input" placeholder="Type your question...">
+    <button type="submit" class="button-20" role="button">Submit</button>
+    </form>
+
+<!--    {% comment %} <input type="text" id="user-input" placeholder="Type your message...">-->
+<!--    <button onclick="sendMessage()">Send</button> {% endcomment %}-->
+</div>
+<script>
+    // Add your JavaScript code here
+
+    const csrftoken = "{{ csrf_token }}";
+
+    const pdfInput = document.getElementById('pdf-input');
+    const pdfContainer = document.getElementById('pdf-container');
+    const pdfPreview = document.getElementById('pdf-preview');
+    const proceedButton = document.getElementById('proceed-button');
+    const pdButton = document.getElementById('pt-Button');
+    const belowProceed = document.getElementById('below-proceed');
+    const localStorageKey = 'uploadedPDF';
+
+    // Event listener for file input change
+
+
+
+    // Open or create an IndexedDB database
+const dbName = 'myDatabase';
+const dbVersion = 1;
+const request = indexedDB.open(dbName, dbVersion);
+
+// Create object store for PDF files
+request.onupgradeneeded = function(event) {
+const db = event.target.result;
+retrieveAndDisplayUploadedFiles(db);
+db.createObjectStore('pdfs', { keyPath: 'id', autoIncrement: true });
+};
+
+
+request.onsuccess = function (event) {
+    const db = event.target.result;
+    retrieveAndDisplayUploadedFiles(db);
+};
+
+
+request.onsuccess = function(event) {
+const db = event.target.result;
+retrieveAndDisplayUploadedFiles(db);
+// Add PDF to the object store when "Proceed" button is clicked
+pdButton.addEventListener('click', function () {
+    const file = pdfInput.files[0];
+    
+    if (file) {
+        console.log("pt button")
+        const transaction = db.transaction(['pdfs'], 'readwrite');
+        const store = transaction.objectStore('pdfs');
+
+        // Assuming 'file' is a Blob representing the PDF file
+        const pdfData = { name: file.name };
+        const addRequest = store.add(pdfData);
+
+        addRequest.onsuccess = function() {
+            console.log('PDF added to IndexedDB');
+
+            alert('PDF has been stored in IndexedDB');
+
+            console.log("working")
+            retrieveAndDisplayUploadedFiles(db);
+        };
+
+        addRequest.onerror = function() {
+            console.error('Error adding PDF to IndexedDB');
+        };
+
+
+
+
+    }
+});
+};
+
+pdfInput.addEventListener('change', function () {
+    const file = pdfInput.files[0];
+    if (file) {
+        // Display the uploaded PDF
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            pdfPreview.src = e.target.result;
+            pdfContainer.style.display = 'block';
+            proceedButton.style.display = 'block';
+
+        };
+        reader.readAsDataURL(file);
+    }
+});
+
+// Function to retrieve and display the list of uploaded files
+function retrieveAndDisplayUploadedFiles(db) {
+const transaction = db.transaction(['pdfs'], 'readonly');
+const store = transaction.objectStore('pdfs');
+const getRequest = store.getAll();
+
+getRequest.onsuccess = function() {
+    const uploadedFiles = getRequest.result;
+    displayUploadedFiles(uploadedFiles);
+};
+
+getRequest.onerror = function() {
+    console.error('Error retrieving uploaded files from IndexedDB');
+};
+}
+
+// Function to display the list of uploaded files
+function displayUploadedFiles(files) {
+belowProceed.innerHTML = 'Uploaded Files:';
+files.forEach((uploadedFile, index) => {
+    belowProceed.innerHTML += `<p>${index + 1}. ${uploadedFile.name}</p>`;
+    console.log(uploadedFile.name)
+});
+}
+
+
+const botAvatarUrl = 'https://www.pngitem.com/pimgs/m/122-1223088_one-bot-discord-avatar-hd-png-download.png';
+const userAvatarUrl = 'https://cdn-icons-png.flaticon.com/512/6596/6596121.png';
+    
+
+
+    {% comment %} document.getElementById('question-form').addEventListener('submit', function (event) {
+        event.preventDefault();
+        sendMessage(event);
+    }); {% endcomment %}
+
+    
+    document.getElementById('question-form').onsubmit = function(event) {
+
+        
+        
+        // Add code to send the user's message to the chatbot
+
+        const formData = new FormData(document.getElementById('question-form'));
+
+    // Retrieve the user input
+        const userInput = formData.get('user_input');
+        document.getElementById('chat-box').innerHTML += `
+        <div class="message user-message">
+            <img src="${userAvatarUrl}" alt="User" class="Uavatar">
+            <p>${userInput}</p>
+        </div>`;
+        // Display the chatbot's response in the chat-box
+        console.log(userInput)
+        event.preventDefault();
+        fetch('/process_question/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'X-CSRFToken': csrftoken, // Ensure you have the CSRF token available
+            },
+            body: `user_input=${userInput}`,
+        })
+        .then(response => response.json())
+        .then(data => {
+            // Handle the response here
+            if (data.message) {
+                // Display the bot's response in the chat box
+                document.getElementById('chat-box').innerHTML += `
+        <div class="message bot-message">
+            <p>${data.message}</p>
+            <img src="${botAvatarUrl}" alt="Bot" class="Bavatar">
+            
+        </div>`;
+            } else {
+                // Handle any errors or other cases
+                console.error('Error in response:', data);
+            }
+        })
+        .catch(error => {
+            console.error('Error sending/receiving messages:', error);
+        });
+    
+        // Clear the input field
+        document.getElementById('user-input').value = '';
+    }
+
+
+
+
+function displayUserResponse(message) {
+    document.getElementById('chat-box').innerHTML += `
+        <div class="message user-message">
+            <img src="${userAvatarUrl}" alt="User" class="avatar">
+            <p>${userInput}</p>
+        </div>`;
+}
+
+function displayBotResponse(message) {
+    document.getElementById('chat-box').innerHTML += `
+        <div class="message bot-message">
+            <img src="${botAvatarUrl}" alt="Bot" class="avatar">
+            <p>${message}</p>
+        </div>`;
+}
+    
+</script>
+</body>
+</html>
